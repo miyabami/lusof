@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticket de Compra</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: #8facbc;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            margin: auto;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ticket de Compra</h1>
+    <div class="container">
+        <p><strong>Cliente:</strong> <span id="cliente"></span></p>
+        <p><strong>Fecha:</strong> <span id="fecha"></span></p>
+        <p><strong>Pizza 1:</strong> <span id="pizza1"></span></p>
+        <p><strong>Pizza 2:</strong> <span id="pizza2"></span></p>
+        <p><strong>Pizza 3:</strong> <span id="pizza3"></span></p>
+        <p><strong>Complementos:</strong> <span id="complementos"></span></p>
+        <p><strong>Método de Entrega:</strong> <span id="metodoEntrega"></span></p>
+        <p><strong>Método de Pago:</strong> <span id="metodoPago"></span></p>
+        <p><strong>Total:</strong> $<span id="total"></span></p>
+        <p><strong>Dinero Pagado:</strong> $<span id="dineroPagado"></span></p>
+        <button onclick="volverAlInicio()">Volver al Inicio</button>
+    </div>
+
+    <script>
+        window.onload = function() {
+            const nombre = localStorage.getItem("nombre");
+            const pizza1 = localStorage.getItem("pizza1");
+            const pizza2 = localStorage.getItem("pizza2");
+            const pizza3 = localStorage.getItem("pizza3");
+            const complementos = localStorage.getItem("complementos");
+            const metodoEntrega = localStorage.getItem("metodoEntrega");
+            const metodoPago = localStorage.getItem("metodoPago");
+            const total = localStorage.getItem("total");
+            const fecha = localStorage.getItem("fecha");
+            const dineroPagado = localStorage.getItem("dineroPagado");
+
+            // Mostrar los datos en el ticket
+            document.getElementById("cliente").innerText = nombre;
+            document.getElementById("pizza1").innerText = pizza1;
+            document.getElementById("pizza2").innerText = pizza2;
+            document.getElementById("pizza3").innerText = pizza3;
+            document.getElementById("complementos").innerText = complementos;
+            document.getElementById("metodoEntrega").innerText = metodoEntrega;
+            document.getElementById("metodoPago").innerText = metodoPago;
+            document.getElementById("total").innerText = total;
+            document.getElementById("fecha").innerText = fecha;
+
+            // Mostrar dinero pagado si es en efectivo
+            if (metodoPago === "Efectivo") {
+                document.getElementById("dineroPagado").innerText = dineroPagado;
+            }
+        }
+
+        function volverAlInicio() {
+            // Limpiar el localStorage
+            localStorage.clear();
+
+            // Redirigir al inicio
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>

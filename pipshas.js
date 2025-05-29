@@ -1,60 +1,43 @@
-// pipshas.js
+window.onload = function() {
+    // Recuperar los datos del pedido
+    const nombre = localStorage.getItem("nombre");
+    const pizza1 = localStorage.getItem("pizza1");
+    const pizza2 = localStorage.getItem("pizza2");
+    const pizza3 = localStorage.getItem("pizza3");
+    const complementos = localStorage.getItem("complementos");
+    const metodoEntrega = localStorage.getItem("metodoEntrega");
+    const metodoPago = localStorage.getItem("metodoPago");
+    const total = localStorage.getItem("total");
+    const fecha = localStorage.getItem("fecha");
+    const dineroPagado = localStorage.getItem("dineroPagado");
 
-// Función para guardar los datos del pedido
-function guardarDatosPedido() {
-    let nombre = document.getElementById("nombreCliente").value || "No especificado";
-    let pizza1 = document.getElementById("pizza1").value || "Ninguna";
-    let pizza2 = document.getElementById("pizza2").value || "Ninguna";
-    let pizza3 = document.getElementById("pizza3").value || "Ninguna";
-    let complementos = document.getElementById("complementos").value || "Ninguno";
-    
-    let metodoEntregaElement = document.querySelector('input[name="entrega"]:checked');
-    let metodoPagoElement = document.querySelector('input[name="pago"]:checked');
+    // Precios de las pizzas y complementos
+    const precioPizza = 120;
+    const precioComplemento = 50;
 
-    let metodoEntrega = metodoEntregaElement ? metodoEntregaElement.value : "No seleccionado";
-    let metodoPago = metodoPagoElement ? metodoPagoElement.value : "No seleccionado";
+    // Mostrar los datos en el ticket
+    document.getElementById("cliente").innerText = nombre;
+    document.getElementById("pizza1").innerText = pizza1;
+    document.getElementById("pizza2").innerText = pizza2;
+    document.getElementById("pizza3").innerText = pizza3;
+    document.getElementById("complementos").innerText = complementos;
+    document.getElementById("metodoEntrega").innerText = metodoEntrega;
+    document.getElementById("metodoPago").innerText = metodoPago;
+    document.getElementById("total").innerText = total;
+    document.getElementById("fecha").innerText = fecha;
 
-    let total = calcularTotal(pizza1, pizza2, pizza3, complementos);
+    // Mostrar precios de las pizzas
+    document.getElementById("precioPizza1").innerText = pizza1 !== "Ninguna" ? precioPizza : 0;
+    document.getElementById("precioPizza2").innerText = pizza2 !== "Ninguna" ? precioPizza : 0;
+    document.getElementById("precioPizza3").innerText = pizza3 !== "Ninguna" ? precioPizza : 0;
 
-    // Guardamos los datos en el localStorage
-    localStorage.setItem("nombre", nombre);
-    localStorage.setItem("pizza1", pizza1);
-    localStorage.setItem("pizza2", pizza2);
-    localStorage.setItem("pizza3", pizza3);
-    localStorage.setItem("complementos", complementos);
-    localStorage.setItem("metodoEntrega", metodoEntrega);
-    localStorage.setItem("metodoPago", metodoPago);
-    localStorage.setItem("total", total);
+    // Mostrar precio de los complementos
+    document.getElementById("precioComplementos").innerText = complementos !== "Ninguno" ? precioComplemento : 0;
 
-    // Guardamos la fecha del pedido
-    let fecha = new Date().toLocaleDateString();
-    localStorage.setItem("fecha", fecha);
-
-    // Redirigir a la página de confirmación o pago según el método de pago
-    if (metodoPago === "Tarjeta") {
-        window.location.href = "pago_tarjeta.html";
+    // Mostrar dinero pagado si es en efectivo
+    if (metodoPago === "Efectivo") {
+        document.getElementById("dineroPagado").innerText = dineroPagado;
     } else {
-        window.location.href = "confirmacion.html";
+        document.getElementById("dineroPagado").innerText = "No aplica";
     }
-}
-
-// Función para calcular el total del pedido
-function calcularTotal(pizza1, pizza2, pizza3, complementos) {
-    let total = 0;
-    let precioPizza = 120; // Precio base de una pizza
-    let precioComplemento = 50; // Precio base de un complemento
-
-    // Sumar el precio de las pizzas seleccionadas
-    [pizza1, pizza2, pizza3].forEach(pizza => {
-        if (pizza !== "Ninguna") {
-            total += precioPizza;
-        }
-    });
-
-    // Agregar el costo de los complementos si se seleccionaron
-    if (complementos !== "Ninguno") {
-        total += precioComplemento;
-    }
-
-    return total.toFixed(2); // Retornar el total con dos decimales
-}
+};

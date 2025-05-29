@@ -87,6 +87,14 @@
             } else {
                 document.getElementById("dineroPagado").innerText = "No aplica";
             }
+    
+        window.onload = function() {
+            // Recuperar el total del localStorage
+            const total = localStorage.getItem("total");
+
+            // Mostrar el total en el ticket
+            document.getElementById("total").innerText = total ? `$${total}` : "No disponible";
+        }
         }
 
         function volverAlInicio() {

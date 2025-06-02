@@ -1,43 +1,41 @@
-window.onload = function() {
-    // Recuperar los datos del pedido
-    const nombre = localStorage.getItem("nombre");
-    const pizza1 = localStorage.getItem("pizza1");
-    const pizza2 = localStorage.getItem("pizza2");
-    const pizza3 = localStorage.getItem("pizza3");
-    const complementos = localStorage.getItem("complementos");
-    const metodoEntrega = localStorage.getItem("metodoEntrega");
-    const metodoPago = localStorage.getItem("metodoPago");
-    const total = localStorage.getItem("total");
-    const fecha = localStorage.getItem("fecha");
-    const dineroPagado = localStorage.getItem("dineroPagado");
+document.addEventListener('DOMContentLoaded', () => {
+  let carrito = [];
+  let total = 0;
 
-    // Precios de las pizzas y complementos
-    const precioPizza = 120;
-    const precioComplemento = 50;
+  try {
+    const carritoJSON = localStorage.getItem('carrito');
+    if (carritoJSON) carrito = JSON.parse(carritoJSON);
 
-    // Mostrar los datos en el ticket
-    document.getElementById("cliente").innerText = nombre;
-    document.getElementById("pizza1").innerText = pizza1;
-    document.getElementById("pizza2").innerText = pizza2;
-    document.getElementById("pizza3").innerText = pizza3;
-    document.getElementById("complementos").innerText = complementos;
-    document.getElementById("metodoEntrega").innerText = metodoEntrega;
-    document.getElementById("metodoPago").innerText = metodoPago;
-    document.getElementById("total").innerText = total;
-    document.getElementById("fecha").innerText = fecha;
+    const totalStr = localStorage.getItem('total');
+    if (totalStr) total = parseFloat(totalStr);
+  } catch (e) {
+    console.error('Error leyendo localStorage:', e);
+  }
 
-    // Mostrar precios de las pizzas
-    document.getElementById("precioPizza1").innerText = pizza1 !== "Ninguna" ? precioPizza : 0;
-    document.getElementById("precioPizza2").innerText = pizza2 !== "Ninguna" ? precioPizza : 0;
-    document.getElementById("precioPizza3").innerText = pizza3 !== "Ninguna" ? precioPizza : 0;
+  const ticketList = document.getElementById('ticket-items');
+  const totalSpan = document.getElementById('total-ticket');
+  const orderId = document.getElementById('order-id');
+  const fecha = document.getElementById('fecha');
 
-    // Mostrar precio de los complementos
-    document.getElementById("precioComplementos").innerText = complementos !== "Ninguno" ? precioComplemento : 0;
+  const date = new Date();
+  fecha.textContent = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+  orderId.textContent = '#' + String(Math.floor(100000 + Math.random() * 900000));
 
-    // Mostrar dinero pagado si es en efectivo
-    if (metodoPago === "Efectivo") {
-        document.getElementById("dineroPagado").innerText = dineroPagado;
-    } else {
-        document.getElementById("dineroPagado").innerText = "No aplica";
-    }
-};
+  if (carrito.length === 0) {
+    const li = document.createElement('li');
+    li.textContent = "No hay productos comprados.";
+    ticketList.appendChild(li);
+  } else {
+    carrito.forEach(item => {
+      const li = document.createElement('li');
+      li.textContent = `${item.nombre} - $${item.precio.toFixed(2)}`;
+      ticketList.appendChild(li);
+    });
+  }
+
+  totalSpan.textContent = total.toFixed(2);
+
+  // Opcional: limpiar el carrito tras mostrar el ticket
+  // localStorage.removeItem('carrito');
+  // localStorage.removeItem('total');
+});

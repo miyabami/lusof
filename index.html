@@ -86,6 +86,24 @@
             const complementos = document.getElementById("complementos").value;
             const metodoEntrega = document.querySelector('input[name="metodoEntrega"]:checked').value;
 
+            // Calcular el total
+            let total = 0;
+            const precios = {
+                "Pepperoni": 100,
+                "Hawaiana": 100,
+                "Mexicana": 100,
+                "Cuatro Quesos": 100,
+                "Vegetariana": 100,
+                "BBQ": 100,
+                "Alitas": 50,
+                "Papas": 50
+            };
+
+            if (pizza1 !== "Ninguna") total += precios[pizza1];
+            if (pizza2 !== "Ninguna") total += precios[pizza2];
+            if (pizza3 !== "Ninguna") total += precios[pizza3];
+            if (complementos !== "Ninguno") total += precios[complementos];
+
             // Guardar datos en localStorage
             localStorage.setItem("fecha", fecha);
             localStorage.setItem("nombre", nombre);
@@ -94,8 +112,9 @@
             localStorage.setItem("pizza3", pizza3);
             localStorage.setItem("complementos", complementos);
             localStorage.setItem("metodoEntrega", metodoEntrega);
+            localStorage.setItem("total", total);
 
-            // Si se elige "Domicilio", redirigir a la página de dirección
+            // Redirigir según método de entrega
             if (metodoEntrega === "Domicilio") {
                 window.location.href = "direccion.html";  // Pide la dirección del usuario
             } else {
@@ -103,7 +122,5 @@
             }
         });
     </script>
-    <script src="pipshas.js"></script>
-
 </body>
 </html>

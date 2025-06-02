@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const carritoJSON = localStorage.getItem('carrito');
     if (carritoJSON) carrito = JSON.parse(carritoJSON);
 
+    // Calculando el total a partir de los elementos del carrito
+    total = carrito.reduce((sum, item) => sum + item.precio, 0);
+
     const totalStr = localStorage.getItem('total');
     if (totalStr) total = parseFloat(totalStr);
   } catch (e) {

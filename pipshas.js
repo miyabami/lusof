@@ -9,12 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
       carrito = JSON.parse(carritoJSON);
     }
 
-    // Calcular el total
-    total = carrito.reduce((sum, item) => sum + item.precio, 0);
-    
-    // Si existe un total guardado, usarlo (aunque lo recalculamos arriba)
-    const totalStr = localStorage.getItem('total');
-    if (totalStr) total = parseFloat(totalStr);
+    // Verificar que el carrito tiene productos válidos
+    if (carrito && Array.isArray(carrito)) {
+      total = carrito.reduce((sum, item) => {
+        if (item.precio && !isNaN(item.precio)) {
+          return sum + item.precio;
+        }
+        return sum;  // Si no hay precio o es inválido, no sumarlo
+      }, 0);
+    }
   } catch (e) {
     console.error('Error leyendo localStorage:', e);
   }
@@ -51,3 +54,4 @@ document.addEventListener('DOMContentLoaded', () => {
   // localStorage.removeItem('carrito');
   // localStorage.removeItem('total');
 });
+

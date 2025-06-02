@@ -75,7 +75,7 @@
       text-align: center;
       margin-top: 1rem;
       text-decoration: none;
-      color: #007BFF;
+      color: #3498db;
       font-weight: bold;
     }
   </style>
@@ -95,58 +95,6 @@
     </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      let carrito = [];
-      let total = 0;
-
-      try {
-        // Recuperar el carrito desde localStorage
-        const carritoJSON = localStorage.getItem('carrito');
-        if (carritoJSON) {
-          carrito = JSON.parse(carritoJSON);
-        }
-
-        // Verificar que el carrito tiene productos válidos
-        if (carrito && Array.isArray(carrito)) {
-          total = carrito.reduce((sum, item) => {
-            if (item.precio && !isNaN(item.precio)) {
-              return sum + item.precio;
-            }
-            return sum;
-          }, 0);
-        }
-      } catch (e) {
-        console.error('Error leyendo localStorage:', e);
-      }
-
-      const ticketList = document.getElementById('ticket-items');
-      const totalSpan = document.getElementById('total-ticket');
-      const orderId = document.getElementById('order-id');
-      const fecha = document.getElementById('fecha');
-
-      const date = new Date();
-      fecha.textContent = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-
-      // Generar un número de orden aleatorio
-      orderId.textContent = String(Math.floor(100000 + Math.random() * 900000));
-
-      // Mostrar productos
-      if (carrito.length === 0) {
-        const li = document.createElement('li');
-        li.textContent = "No hay productos comprados.";
-        ticketList.appendChild(li);
-      } else {
-        carrito.forEach(item => {
-          const li = document.createElement('li');
-          li.textContent = `${item.nombre} - $${item.precio.toFixed(2)}`;
-          ticketList.appendChild(li);
-        });
-      }
-
-      // Mostrar total
-      totalSpan.textContent = total.toFixed(2);
-    });
-  </script>
+  <script src="pipshas.js"></script>
 </body>
 </html>

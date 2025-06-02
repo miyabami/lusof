@@ -84,7 +84,7 @@
   <div class="ticket-container">
     <div class="ticket">
       <h2>TICKET DE COMPRA</h2>
-      <p class="ticket-id">Núm. Orden: #<span id="order-id"></span></p>
+      <p class="ticket-id">Núm. Orden: <span id="order-id"></span></p>
       <p>Fecha: <span id="fecha"></span></p>
       <hr />
       <ul id="ticket-items" class="ticket-items"></ul>
@@ -96,52 +96,57 @@
   </div>
 
   <script>
-    window.onload = function() {
-      // Obtener datos del localStorage
-      const pizza1 = localStorage.getItem("pizza1");
-      const pizza2 = localStorage.getItem("pizza2");
-      const pizza3 = localStorage.getItem("pizza3");
-      const complementos = localStorage.getItem("complementos");
-      const total = localStorage.getItem("total");
-      const fecha = localStorage.getItem("fecha");
+    document.addEventListener('DOMContentLoaded', () => {
+      let carrito = [];
+      let total = 0;
 
-      // Mostrar fecha
-      document.getElementById("fecha").textContent = fecha;
+      try {
+        // Recuperar el carrito desde localStorage
+        const carritoJSON = localStorage.getItem('carrito');
+        if (carritoJSON) {
+          carrito = JSON.parse(carritoJSON);
+        }
 
-      // Generar número de orden aleatorio
-      const orderId = Math.floor(Math.random() * 1000000);
-      document.getElementById("order-id").textContent = orderId;
+        // Verificar que el carrito tiene productos válidos
+        if (carrito && Array.isArray(carrito)) {
+          total = carrito.reduce((sum, item) => {
+            if (item.precio && !isNaN(item.precio)) {
+              return sum + item.precio;
+            }
+            return sum;
+          }, 0);
+        }
+      } catch (e) {
+        console.error('Error leyendo localStorage:', e);
+      }
+
+      const ticketList = document.getElementById('ticket-items');
+      const totalSpan = document.getElementById('total-ticket');
+      const orderId = document.getElementById('order-id');
+      const fecha = document.getElementById('fecha');
+
+      const date = new Date();
+      fecha.textContent = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+
+      // Generar un número de orden aleatorio
+      orderId.textContent = String(Math.floor(100000 + Math.random() * 900000));
+
+      // Mostrar productos
+      if (carrito.length === 0) {
+        const li = document.createElement('li');
+        li.textContent = "No hay productos comprados.";
+        ticketList.appendChild(li);
+      } else {
+        carrito.forEach(item => {
+          const li = document.createElement('li');
+          li.textContent = `${item.nombre} - $${item.precio.toFixed(2)}`;
+          ticketList.appendChild(li);
+        });
+      }
 
       // Mostrar total
-      document.getElementById("total-ticket").textContent = total;
-
-      // Agregar productos a la lista
-      const itemList = document.getElementById("ticket-items");
-
-      if (pizza1) {
-        const li = document.createElement("li");
-        li.innerHTML = `<span>Pizza 1</span><span>${pizza1}</span>`;
-        itemList.appendChild(li);
-      }
-
-      if (pizza2) {
-        const li = document.createElement("li");
-        li.innerHTML = `<span>Pizza 2</span><span>${pizza2}</span>`;
-        itemList.appendChild(li);
-      }
-
-      if (pizza3) {
-        const li = document.createElement("li");
-        li.innerHTML = `<span>Pizza 3</span><span>${pizza3}</span>`;
-        itemList.appendChild(li);
-      }
-
-      if (complementos) {
-        const li = document.createElement("li");
-        li.innerHTML = `<span>Complementos</span><span>${complementos}</span>`;
-        itemList.appendChild(li);
-      }
-    }
+      totalSpan.textContent = total.toFixed(2);
+    });
   </script>
 </body>
 </html>

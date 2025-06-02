@@ -3,12 +3,16 @@ document.addEventListener('DOMContentLoaded', () => {
   let total = 0;
 
   try {
+    // Recuperar el carrito desde localStorage
     const carritoJSON = localStorage.getItem('carrito');
-    if (carritoJSON) carrito = JSON.parse(carritoJSON);
+    if (carritoJSON) {
+      carrito = JSON.parse(carritoJSON);
+    }
 
-    // Calculando el total a partir de los elementos del carrito
+    // Calcular el total
     total = carrito.reduce((sum, item) => sum + item.precio, 0);
-
+    
+    // Si existe un total guardado, usarlo (aunque lo recalculamos arriba)
     const totalStr = localStorage.getItem('total');
     if (totalStr) total = parseFloat(totalStr);
   } catch (e) {
@@ -22,13 +26,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const date = new Date();
   fecha.textContent = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+
+  // Generar un número de orden aleatorio
   orderId.textContent = '#' + String(Math.floor(100000 + Math.random() * 900000));
 
+  // Si el carrito está vacío, mostrar mensaje
   if (carrito.length === 0) {
     const li = document.createElement('li');
     li.textContent = "No hay productos comprados.";
     ticketList.appendChild(li);
   } else {
+    // Mostrar los productos del carrito
     carrito.forEach(item => {
       const li = document.createElement('li');
       li.textContent = `${item.nombre} - $${item.precio.toFixed(2)}`;
@@ -36,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Mostrar el total
   totalSpan.textContent = total.toFixed(2);
 
   // Opcional: limpiar el carrito tras mostrar el ticket

@@ -86,39 +86,41 @@
             const complementos = document.getElementById("complementos").value;
             const metodoEntrega = document.querySelector('input[name="metodoEntrega"]:checked').value;
 
-            // Calcular el total
-            let total = 0;
-            const precios = {
-                "Pepperoni": 100,
-                "Hawaiana": 100,
-                "Mexicana": 100,
-                "Cuatro Quesos": 100,
-                "Vegetariana": 100,
-                "BBQ": 100,
-                "Alitas": 50,
-                "Papas": 50
-            };
-
-            if (pizza1 !== "Ninguna") total += precios[pizza1];
-            if (pizza2 !== "Ninguna") total += precios[pizza2];
-            if (pizza3 !== "Ninguna") total += precios[pizza3];
-            if (complementos !== "Ninguno") total += precios[complementos];
-
             // Guardar datos en localStorage
             localStorage.setItem("fecha", fecha);
             localStorage.setItem("nombre", nombre);
-            localStorage.setItem("pizza1", pizza1);
-            localStorage.setItem("pizza2", pizza2);
-            localStorage.setItem("pizza3", pizza3);
-            localStorage.setItem("complementos", complementos);
             localStorage.setItem("metodoEntrega", metodoEntrega);
-            localStorage.setItem("total", total);
+
+            // Crear carrito
+            let carrito = [];
+
+            // Función para agregar producto al carrito
+            function agregarProducto(nombre, precio) {
+                carrito.push({ nombre, precio });
+            }
+
+            // Agregar pizzas al carrito
+            if (pizza1 !== "Ninguna") agregarProducto(pizza1, 100);
+            if (pizza2 !== "Ninguna") agregarProducto(pizza2, 100);
+            if (pizza3 !== "Ninguna") agregarProducto(pizza3, 100);
+
+            // Agregar complementos al carrito
+            if (complementos === "Alitas" || complementos === "Papas") {
+                agregarProducto(complementos, 50);
+            }
+
+            // Calcular total
+            const total = carrito.reduce((sum, item) => sum + item.precio, 0);
+
+            // Guardar carrito y total en localStorage
+            localStorage.setItem("carrito", JSON.stringify(carrito));
+            localStorage.setItem("total", total.toFixed(2));
 
             // Redirigir según método de entrega
             if (metodoEntrega === "Domicilio") {
-                window.location.href = "direccion.html";  // Pide la dirección del usuario
+                window.location.href = "direccion.html";
             } else {
-                window.location.href = "metodo_pago.html";  // Si no, va directamente al pago
+                window.location.href = "metodo_pago.html";
             }
         });
     </script>
